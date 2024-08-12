@@ -1,5 +1,8 @@
 const prompt = require("prompt-sync")();
-const corretora = require("./corretora.js");
+
+const corretor = require("./corretor.js");
+const imovel = require("./imovel.js");
+const cliente = require("./cliente.js");
 
 const db = [];
 
@@ -15,21 +18,34 @@ function getIndice(id) {
 }
 
 function model(id = ++ultimoId) {
-  const nome = prompt("Digite o nome: ");
-
-  let id_corretora = 0;
-  if (corretora.listar()) {
-    id_corretora = parseInt(prompt("Digite o ID da Corretora: "));
+  let id_corretor = 0;
+  if (corretor.listar()) {
+    id_corretor = parseInt(prompt("Digite o ID do Corretor: "));
   }
 
+  let id_imovel = 0;
+  if (imovel.listar()) {
+    id_imovel = parseInt(prompt("Digite o ID do Imóvel: "));
+  }
+
+  let id_cliente = 0;
+  if (cliente.listar()) {
+    id_cliente = parseInt(prompt("Digite o ID do Imóvel: "));
+  }
+  
+
   if (
-    nome != "" &&
-    corretora.mostrar(id_corretora)
+    imovel.mostrar(id_imovel) &&
+    cliente.mostrar(id_cliente) &&
+    corretor.mostrar(id_corretor) &&
+    corretor.mostrar(id_corretor).id_corretora == 
+    imovel.mostrar(id_imovel).id_corretora
   ) {
     return {
       id,
-      nome,
-      id_corretora
+      id_corretor,
+      id_imovel,
+      id_cliente
     };
   }
 
@@ -43,12 +59,6 @@ function criar() {
     db.push(novo);
     console.log("Registro criado com sucesso");
   }
-}
-
-function mostrar(id) {
-  const el = db.find(el => el.id == id)
-
-  return el
 }
 
 function listar() {
@@ -96,5 +106,4 @@ module.exports = {
   listar,
   atualizar,
   remover,
-  mostrar,
 };
